@@ -1,6 +1,7 @@
 ### Kotlin ###
 # Compiled class file
 *.class
+.kotlin/
 
 # Log file
 *.log
