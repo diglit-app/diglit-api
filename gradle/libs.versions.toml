@@ -1,0 +1,112 @@
+[versions]
+kotlin = "2.2.0"
+jvm = "21"
+gradle = "9.0.0"
+junit = "5.13.3"
+spotless = "7.2.1"
+ktlint = "1.7.1"
+slf4j-api = "2.0.13"
+logback ="1.4.11"
+kotlin-logging = "3.0.5"
+mockito = "5.18.0"
+mockito-kotlin = "6.0.0"
+mockito-inline = "5.2.0"
+ktor = "3.2.3"
+exposed = "0.61.0"
+postgres = "42.7.7"
+hikari = "7.0.0"
+serialization = "1.9.0"
+coroutines = "1.10.2"
+
+[plugins]
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
+
+[libraries]
+# Testing
+junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit" }
+kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
+
+# Logging
+slf4j-api = { module = "org.slf4j:slf4j-api", version.ref = "slf4j-api" }
+logback-classic = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
+kotlin-logging = { module = "io.github.microutils:kotlin-logging-jvm", version.ref = "kotlin-logging" }
+
+# Mockito
+mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockito" }
+mockito-kotlin = { module = "org.mockito.kotlin:mockito-kotlin", version.ref = "mockito-kotlin" }
+mockito-inline = { module = "org.mockito:mockito-inline", version.ref = "mockito-inline" }
+
+# Ktor core
+ktor-server-core = { module = "io.ktor:ktor-server-core-jvm", version.ref = "ktor" }
+ktor-server-netty = { module = "io.ktor:ktor-server-netty-jvm", version.ref = "ktor" }
+ktor-server-content-negotiation = { module = "io.ktor:ktor-server-content-negotiation-jvm", version.ref = "ktor" }
+ktor-serialization-json = { module = "io.ktor:ktor-serialization-kotlinx-json-jvm", version.ref = "ktor" }
+ktor-server-call-logging = { module = "io.ktor:ktor-server-call-logging-jvm", version.ref = "ktor" }
+ktor-server-status-pages = { module = "io.ktor:ktor-server-status-pages-jvm", version.ref = "ktor" }
+ktor-server-auth = { module = "io.ktor:ktor-server-auth-jvm", version.ref = "ktor" }
+ktor-server-auth-jwt = { module = "io.ktor:ktor-server-auth-jwt-jvm", version.ref = "ktor" }
+
+# Exposed (SQL ORM)
+exposed-core = { module = "org.jetbrains.exposed:exposed-core", version.ref = "exposed" }
+exposed-dao = { module = "org.jetbrains.exposed:exposed-dao", version.ref = "exposed" }
+exposed-jdbc = { module = "org.jetbrains.exposed:exposed-jdbc", version.ref = "exposed" }
+exposed-kotlin-datetime = { module = "org.jetbrains.exposed:exposed-kotlin-datetime", version.ref = "exposed" }
+
+# JDBC & Connection Pooling
+postgresql = { module = "org.postgresql:postgresql", version.ref = "postgres" }
+hikaricp = { module = "com.zaxxer:HikariCP", version.ref = "hikari" }
+
+# KotlinX Serialization
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization" }
+
+# Coroutines
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
+
+[bundles]
+test = [
+    "junit-jupiter-api",
+    "kotlin-test"
+]
+
+logging = [
+  "slf4j-api",
+  "logback-classic",
+  "kotlin-logging"
+]
+
+mockito = [
+  "mockito-core",
+  "mockito-inline",
+  "mockito-kotlin"
+]
+
+ktor-core = [
+    "ktor-server-core",
+    "ktor-server-netty",
+    "ktor-server-call-logging",
+    "ktor-server-status-pages"
+]
+
+ktor-serialization = [
+    "ktor-server-content-negotiation",
+    "ktor-serialization-json"
+]
+
+ktor-auth = [
+    "ktor-server-auth",
+    "ktor-server-auth-jwt"
+]
+
+exposed = [
+    "exposed-core",
+    "exposed-dao",
+    "exposed-jdbc",
+    "exposed-kotlin-datetime"
+]
+
+jdbc = [
+    "postgresql",
+    "hikaricp"
+]
