@@ -24,6 +24,7 @@ dependencies {
     implementation(libs.bundles.jdbc)
     implementation(libs.bcrypt)
     implementation(libs.dotenv)
+    implementation(libs.kotlinx.datetime)
 
     testImplementation(libs.bundles.test)
     testImplementation(libs.bundles.mockito)
