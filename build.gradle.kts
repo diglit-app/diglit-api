@@ -45,7 +45,7 @@ spotless {
         target("**/*.kt")
 
         // Convert text to Kotlin multiline comment
-        val license = "/*\n${file("LICENSE").readLines().joinToString("\n") { " * $it" }}\n*/"
+        val license = "/*\n${file("LICENSE_HEADER").readLines().joinToString("\n") { " * $it" }}\n*/"
         licenseHeader(license)
     }
 }
