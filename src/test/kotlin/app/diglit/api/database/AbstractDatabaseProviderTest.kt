@@ -45,6 +45,14 @@ class AbstractDatabaseProviderTest : BaseDatabaseProviderTest() {
     override var provider: DatabaseProvider =
         object : AbstractDatabaseProvider() {
             override val source: DataSource = this@AbstractDatabaseProviderTest.source
+
+            public override fun validateEnvironmentVariables(
+                jdbcUrl: String?,
+                username: String?,
+                password: String?,
+            ) {
+                super.validateEnvironmentVariables(jdbcUrl, username, password)
+            }
         }
 
     @BeforeEach

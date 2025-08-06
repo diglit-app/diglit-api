@@ -22,12 +22,7 @@ import org.junit.jupiter.api.Test
 /**
  * Defines the common unit tests for [DatabaseProvider].
  */
-abstract class BaseDatabaseProviderTest {
-    /**
-     * The database provider under test.
-     */
-    protected abstract var provider: DatabaseProvider
-
+abstract class BaseDatabaseProviderTest : DatabaseProviderTest() {
     /**
      * Verifies that calling [DatabaseProvider.connect] multiple times establishes the connection only once.
      */

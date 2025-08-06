@@ -22,6 +22,8 @@ import java.sql.Statement
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 const val ADMIN_DATABASE_URL = "jdbc:postgresql://localhost:5432/postgres"
 const val TEST_DATABASE_USER = "diglit_test"
@@ -70,32 +72,32 @@ abstract class StandardDatabaseProviderTest : BaseDatabaseProviderTest() {
     override fun `connects only once`() {
         provider.connect()
         provider.connect()
-        assert(provider.isConnected())
+        assertTrue { provider.isConnected() }
     }
 
     @Test
     override fun `disconnects when connected`() {
         provider.connect()
         provider.disconnect()
-        assert(!provider.isConnected())
+        assertFalse { provider.isConnected() }
     }
 
     @Test
     override fun `does nothing when already disconnected`() {
         provider.disconnect()
-        assert(!provider.isConnected())
+        assertFalse { provider.isConnected() }
     }
 
     @Test
     override fun `closes when connected`() {
         provider.connect()
         provider.close()
-        assert(!provider.isConnected())
+        assertFalse { provider.isConnected() }
     }
 
     @Test
     override fun `does nothing when already closed`() {
         provider.close()
-        assert(!provider.isConnected())
+        assertFalse { provider.isConnected() }
     }
 }

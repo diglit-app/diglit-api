@@ -61,29 +61,6 @@ class PostgresDatabaseProvider(
         }
 
     /**
-     * Validates environment variables required for the database connection.
-     */
-    private fun validateEnvironmentVariables(
-        jdbcUrl: String?,
-        username: String?,
-        password: String?,
-    ) {
-        val names =
-            listOf(
-                ENVIRONMENT_DATABASE_URL,
-                ENVIRONMENT_DB_USER,
-                ENVIRONMENT_DB_PASSWORD,
-            )
-        val values = listOf(jdbcUrl, username, password)
-        names.zip(values).forEach { (name, value) ->
-            if (value.isNullOrBlank()) {
-                logger.error { "Environment variable $name is not set or empty." }
-                throw IllegalStateException("$name must be provided")
-            }
-        }
-    }
-
-    /**
      * Configures the HikariCP connection pool.
      */
     private fun configureHikari(
