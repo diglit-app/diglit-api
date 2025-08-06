@@ -112,3 +112,4 @@ gradle-app.setting
 
 ### Environment ###
 .env
+!.env.example

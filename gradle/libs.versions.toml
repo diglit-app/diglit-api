@@ -6,7 +6,7 @@ junit = "5.13.3"
 spotless = "7.2.1"
 ktlint = "1.7.1"
 slf4j-api = "2.0.13"
-logback ="1.4.11"
+logback = "1.4.11"
 kotlin-logging = "3.0.5"
 mockito = "5.18.0"
 mockito-kotlin = "6.0.0"
@@ -17,6 +17,8 @@ postgres = "42.7.7"
 hikari = "7.0.0"
 serialization = "1.9.0"
 coroutines = "1.10.2"
+bcrypt = "0.10.2"
+dotenv = "6.5.1"
 
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
@@ -64,6 +66,12 @@ kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serializa
 # Coroutines
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
 
+# Encryption
+bcrypt = { module = "at.favre.lib:bcrypt", version.ref = "bcrypt" }
+
+# Environment Variables
+dotenv = { module = "io.github.cdimascio:dotenv-kotlin", version.ref = "dotenv" }
+
 [bundles]
 test = [
     "junit-jupiter-api",
@@ -71,15 +79,15 @@ test = [
 ]
 
 logging = [
-  "slf4j-api",
-  "logback-classic",
-  "kotlin-logging"
+    "slf4j-api",
+    "logback-classic",
+    "kotlin-logging"
 ]
 
 mockito = [
-  "mockito-core",
-  "mockito-inline",
-  "mockito-kotlin"
+    "mockito-core",
+    "mockito-inline",
+    "mockito-kotlin"
 ]
 
 ktor-core = [
