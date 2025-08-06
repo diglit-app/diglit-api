@@ -22,6 +22,8 @@ dependencies {
     implementation(libs.bundles.ktor.auth)
     implementation(libs.bundles.exposed)
     implementation(libs.bundles.jdbc)
+    implementation(libs.bcrypt)
+    implementation(libs.dotenv)
 
     testImplementation(libs.bundles.test)
     testImplementation(libs.bundles.mockito)
@@ -32,20 +34,20 @@ kotlin {
 }
 
 application {
-    mainClass.set("app.diglit.api.ApplicationKt")
+    mainClass.set("app.diglit.api.MainKt")
 }
 
 spotless {
-      kotlin {
-            ktlint(libs.versions.ktlint.get())
+    kotlin {
+        ktlint(libs.versions.ktlint.get())
 
-            // Since spotless cannot find the files in a multiplatform project, we have to specify the source sets manually
-            target("**/*.kt")
+        // Since spotless cannot find the files in a multiplatform project, we have to specify the source sets manually
+        target("**/*.kt")
 
-            // Convert text to Kotlin multiline comment
-            val license = "/*\n${file("LICENSE").readLines().joinToString("\n") { " * $it" }}\n*/"
-            licenseHeader(license)
-        }
+        // Convert text to Kotlin multiline comment
+        val license = "/*\n${file("LICENSE").readLines().joinToString("\n") { " * $it" }}\n*/"
+        licenseHeader(license)
+    }
 }
 
 tasks {

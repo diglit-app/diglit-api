@@ -1,0 +1,5 @@
+# Database configuration for PostgreSQL
+
+JDBC_DATABASE_URL=<database_url>   # e.g. jdbc:postgresql://localhost:5432/diglit_db
+DB_USER=<username>                 # e.g. postgres
+DB_PASSWORD=<password>             # e.g. your_secure_password
