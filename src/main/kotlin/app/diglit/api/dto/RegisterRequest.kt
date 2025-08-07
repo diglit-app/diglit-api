@@ -15,41 +15,25 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
-package app.diglit.api.database.schema
+package app.diglit.api.dto
 
 import app.diglit.api.repository.User
-import org.jetbrains.exposed.sql.Table
+import kotlinx.serialization.Serializable
 
 /**
- * A schema object representing the `users` table in the database.
+ * Request payload for registering a new user.
  *
- * @see User
+ * Contains the necessary information required to create a new [User] account.
+ *
+ * @property email The user's email address. Must be unique and valid.
+ * @property firstName The user's first name.
+ * @property lastName The user's last name.
+ * @property password The user's plaintext password.
  */
-object Users : Table() {
-    /**
-     * The unique identifier for the user.
-     */
-    val id = uuid("id").autoGenerate()
-
-    /**
-     * The first name of the user.
-     */
-    val firstName = varchar("first_name", 64)
-
-    /**
-     * The last name of the user.
-     */
-    val lastName = varchar("last_name", 64)
-
-    /**
-     * The email address of the user.
-     */
-    val email = varchar("email", 128).uniqueIndex()
-
-    /**
-     * The hashed password of the user.
-     */
-    val hashedPassword = varchar("hashed_password", 255)
-
-    override val primaryKey = PrimaryKey(id)
-}
+@Serializable
+data class RegisterRequest(
+    val email: String,
+    val firstName: String,
+    val lastName: String,
+    val password: String,
+)

@@ -30,11 +30,11 @@ import javax.sql.DataSource
  * Subclasses are expected to provide the specific [DataSource] that will be used to manage database connections.
  * This class helps implementers focus on the specific database configuration rather than the connection logic.
  *
- * @property dotenv The [Dotenv] instance used to load local database configuration from environment variables.
+ * @property environments The [Dotenv] instance used to load local database configuration from environment variables.
  * configuration.
  */
 abstract class AbstractDatabaseProvider(
-    protected val dotenv: Dotenv = dotenv(),
+    protected val environments: Dotenv = dotenv(),
 ) : DatabaseProvider {
     /**
      * The data source used to establish the database connection.

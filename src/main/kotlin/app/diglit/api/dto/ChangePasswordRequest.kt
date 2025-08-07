@@ -15,17 +15,16 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
-package app.diglit.api.repository
-
-import io.ktor.http.HttpStatusCode
-import kotlinx.serialization.Serializable
+package app.diglit.api.dto
 
 /**
- * Signals that a user with the specified email is already registered in the database.
+ * Request payload for changing a user's password.
+ *
+ * @property oldPassword The current password of the user, used for authentication before changing the email.
+ * @property newPassword The new password to be set.
  */
-@Serializable
-class UserAlreadyRegisteredException :
-    ApiException(
-        HttpStatusCode.Conflict,
-        "An account with this email already exists",
-    )
+@kotlinx.serialization.Serializable
+data class ChangePasswordRequest(
+    val oldPassword: String,
+    val newPassword: String,
+)

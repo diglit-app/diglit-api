@@ -26,18 +26,18 @@ import javax.sql.DataSource
 /**
  * Manages the connection to a PostgreSQL database using HikariCP for connection pooling.
  *
- * @param dotenv The [Dotenv] instance used to load local database configuration from environment variables.
+ * @param environments The [Dotenv] instance used to load local database configuration from environment variables.
  */
 class PostgresDatabaseProvider(
-    dotenv: Dotenv = dotenv(),
-) : AbstractDatabaseProvider(dotenv) {
+    environments: Dotenv = dotenv(),
+) : AbstractDatabaseProvider(environments) {
     override val source: DataSource =
         run {
             logger.info { "Initializing PostgreSQL database connection..." }
 
-            val jdbcUrl = dotenv[ENVIRONMENT_DATABASE_URL]
-            val username = dotenv[ENVIRONMENT_DB_USER]
-            val password = dotenv[ENVIRONMENT_DB_PASSWORD]
+            val jdbcUrl = environments[ENVIRONMENT_DATABASE_URL]
+            val username = environments[ENVIRONMENT_DB_USER]
+            val password = environments[ENVIRONMENT_DB_PASSWORD]
 
             validateEnvironmentVariables(jdbcUrl, username, password)
 

@@ -24,9 +24,8 @@ import kotlinx.serialization.Serializable
  * Signals that the provided credentials are invalid for a user.
  */
 @Serializable
-class InvalidCredentialsException(
-    val email: String,
-) : ApiException(
+class InvalidCredentialsException :
+    ApiException(
         HttpStatusCode.Unauthorized,
-        "Invalid credentials for email: $email",
+        "Invalid credentials",
     )

@@ -19,14 +19,10 @@ package app.diglit.api.repository
 
 import app.diglit.api.database.schema.Users
 import app.diglit.api.util.UUIDSerializer
-import kotlinx.datetime.LocalDateTime
-import kotlinx.datetime.toLocalDateTime
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import org.jetbrains.exposed.sql.ResultRow
 import java.util.UUID
-import kotlin.time.Clock
-import kotlin.time.ExperimentalTime
 
 /**
  * Represents a [User] from a database.
@@ -36,10 +32,8 @@ import kotlin.time.ExperimentalTime
  * @property lastName The last name of the user.
  * @property email The email address of the user.
  * @property hashedPassword The hashed password of the user.
- * @property createdAt The date and time when the user was created.
- * @property updatedAt The date and time when the user was last updated.
  *
- * @see app.diglit.api.database.schema.Users
+ * @see Users
  */
 @Serializable
 data class User(
@@ -50,20 +44,7 @@ data class User(
     val email: String,
     @Transient
     val hashedPassword: String = "",
-    val createdAt: LocalDateTime,
-    val updatedAt: LocalDateTime,
-) {
-    @OptIn(ExperimentalTime::class)
-    constructor(user: User, newHashedPassword: String) : this(
-        id = user.id,
-        firstName = user.firstName,
-        lastName = user.lastName,
-        email = user.email,
-        hashedPassword = newHashedPassword,
-        createdAt = user.createdAt,
-        updatedAt = Clock.System.now().toLocalDateTime(Users.TIME_ZONE),
-    )
-}
+)
 
 /**
  * Returns a [User] object from a [ResultRow].
@@ -75,6 +56,4 @@ fun ResultRow.toUser(): User =
         lastName = this[Users.lastName],
         email = this[Users.email],
         hashedPassword = this[Users.hashedPassword],
-        createdAt = this[Users.createdAt],
-        updatedAt = this[Users.updatedAt],
     )

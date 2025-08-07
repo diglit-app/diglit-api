@@ -38,6 +38,13 @@ application {
     mainClass.set("app.diglit.api.MainKt")
 }
 
+configurations.all {
+    resolutionStrategy {
+        force(libs.kotlinx.datetime)
+    }
+}
+
+
 spotless {
     kotlin {
         ktlint(libs.versions.ktlint.get())

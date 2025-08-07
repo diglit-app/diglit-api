@@ -17,8 +17,17 @@
 */
 package app.diglit.api
 
+import io.ktor.server.application.Application
+import io.ktor.server.engine.embeddedServer
+import io.ktor.server.netty.Netty
+
 /**
  * Main entry point for the Diglit API server.
  */
 fun main() {
+    embeddedServer(
+        Netty,
+        port = 8080,
+        module = Application::module,
+    ).start(wait = true)
 }

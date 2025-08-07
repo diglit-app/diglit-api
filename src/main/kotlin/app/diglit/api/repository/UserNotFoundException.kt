@@ -24,9 +24,8 @@ import kotlinx.serialization.Serializable
  * Signals that a [User] was not found in the database.
  */
 @Serializable
-class UserNotFoundException(
-    val email: String,
-) : ApiException(
+class UserNotFoundException :
+    ApiException(
         HttpStatusCode.NotFound,
-        "User with email $email not found",
+        "User not found",
     )
