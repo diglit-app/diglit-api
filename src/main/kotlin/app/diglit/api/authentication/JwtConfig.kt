@@ -36,6 +36,12 @@ class JwtConfig(
     val issuer: String,
     val tokenLifeTime: Long = DEFAULT_TOKEN_LIFETIME,
 ) {
+    init {
+        require(!secret.isBlank()) {
+            "JWT secret must not be blank"
+        }
+    }
+
     /**
      * The algorithm used for signing and verifying tokens.
      */

@@ -23,7 +23,6 @@ import kotlin.test.Test
 
 /**
  * Provides a skeleton for unit tests of [DatabaseProvider] implementations that use a standard JDBC database setup.
-
  * The classification tree below models the valid and invalid input spaces, and each branch is covered by a
  * corresponding test case.
  * ```
