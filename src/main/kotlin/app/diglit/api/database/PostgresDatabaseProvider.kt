@@ -74,12 +74,17 @@ class PostgresDatabaseProvider(
                 this.driverClassName = "org.postgresql.Driver"
                 this.username = username
                 this.password = password
-                this.maximumPoolSize = 10
+                this.maximumPoolSize = 2
                 this.isAutoCommit = false
                 this.transactionIsolation = "TRANSACTION_REPEATABLE_READ"
                 // Validate the configuration
                 validate()
             }
         return config
+    }
+
+    override fun close() {
+        (source as HikariDataSource).close()
+        connected = false
     }
 }

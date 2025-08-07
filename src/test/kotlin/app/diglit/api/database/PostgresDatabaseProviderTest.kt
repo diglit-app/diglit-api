@@ -17,51 +17,16 @@
 */
 package app.diglit.api.database
 
-import io.github.cdimascio.dotenv.dotenv
-import kotlin.test.AfterTest
-import kotlin.test.BeforeTest
-
-const val TEST_DATABASE_URL = "jdbc:postgresql://localhost:5432/diglit_test"
+import io.github.cdimascio.dotenv.Dotenv
+import org.junit.jupiter.api.MethodOrderer
+import org.junit.jupiter.api.TestMethodOrder
 
 /**
- * Defines the unit tests for [PostgresDatabaseProvider].
+ * A unit test class for [PostgresDatabaseProvider].
  *
- * Please ensure that a PostgreSQL role with the name [TEST_DATABASE_USER] exists and has the password
- * [TEST_DATABASE_PASSWORD].
- *
- * Use the following command to create the role if it does not exist:
- * ```
- * psql -U postgres -c "CREATE ROLE username WITH LOGIN PASSWORD 'password' CREATEDB;"
- * ```
- * where `username` is the value of [TEST_DATABASE_USER] and `'password'` is the value of [TEST_DATABASE_PASSWORD].
+ * Sets up a PostgreSQL test database using `postgres.env` and verifies that the provider behaves as expected.
  */
-class PostgresDatabaseProviderTest : StandardDatabaseProviderTest() {
-    override lateinit var provider: DatabaseProvider
-
-    override val dbUrl: String = TEST_DATABASE_URL
-
-    @BeforeTest
-    override fun setup() {
-        executeAsAdmin {
-            it.executeUpdate("DROP DATABASE IF EXISTS $TEST_DATABASE_NAME")
-            it.executeUpdate("CREATE DATABASE $TEST_DATABASE_NAME OWNER $TEST_DATABASE_USER")
-        }
-        val dotenv =
-            dotenv {
-                ignoreIfMalformed = true
-                ignoreIfMissing = true
-                directory =
-                    "src/test/resources/${PostgresDatabaseProviderTest::class.java.`package`.name.replace('.', '/')}"
-                filename = "postgres_test.env"
-            }
-
-        provider = PostgresDatabaseProvider(dotenv)
-    }
-
-    @AfterTest
-    override fun tearDown() {
-        executeAsAdmin {
-            it.executeUpdate("DROP DATABASE IF EXISTS $TEST_DATABASE_NAME")
-        }
-    }
+@TestMethodOrder(MethodOrderer.MethodName::class)
+class PostgresDatabaseProviderTest : BasicDatabaseProviderTest(DBMS.TEST_NAME, "postgres.env") {
+    override fun createProvider(environments: Dotenv): DatabaseProvider = PostgresDatabaseProvider(environments)
 }

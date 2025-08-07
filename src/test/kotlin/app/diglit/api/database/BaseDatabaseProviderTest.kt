@@ -17,39 +17,80 @@
 */
 package app.diglit.api.database
 
-import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.MethodOrderer
+import org.junit.jupiter.api.TestMethodOrder
+import kotlin.test.Test
 
 /**
- * Defines the common unit tests for [DatabaseProvider].
+ * Provides a skeleton for unit tests of [DatabaseProvider] implementations that use a standard JDBC database setup.
+
+ * The classification tree below models the valid and invalid input spaces, and each branch is covered by a
+ * corresponding test case.
+ * ```
+ * ├── connect()
+ * │   ├── When disconnected        → TC08
+ * │   └── When already connected   → TC09
+ * ├── disconnect()
+ * │   ├── When connected           → TC10
+ * │   └── When already disconnected→ TC11
+ * ├── close()
+ * │   ├── When connected           → TC12
+ * │   └── When already disconnected→ TC13
+ * └── isConnected()
+ *     ├── After connect            → TC14
+ *     ├── After disconnect         → TC15
+ * ```
  */
+@TestMethodOrder(MethodOrderer.MethodName::class)
 abstract class BaseDatabaseProviderTest : DatabaseProviderTest() {
     /**
-     * Verifies that calling [DatabaseProvider.connect] multiple times establishes the connection only once.
+     * The [DatabaseProvider] instance under test.
      */
-    @Test
-    abstract fun `connects only once`()
+    protected abstract val provider: DatabaseProvider
 
     /**
-     * Verifies that [DatabaseProvider.disconnect] properly terminates an active connection.
+     * TC08 – connect() when disconnected.
      */
     @Test
-    abstract fun `disconnects when connected`()
+    abstract fun `TC08 - connect when disconnected establishes connection`()
 
     /**
-     * Verifies that calling [DatabaseProvider.disconnect] when already closed is a safe no-op.
+     * TC09 – connect() when already connected does nothing.
      */
     @Test
-    abstract fun `does nothing when already disconnected`()
+    abstract fun `TC09 - connect when already connected does nothing`()
 
     /**
-     * Verifies that [DatabaseProvider.close] properly terminates an active connection.
+     * TC10 – disconnect() when connected closes connection.
      */
     @Test
-    abstract fun `closes when connected`()
+    abstract fun `TC10 - disconnect when connected closes connection`()
 
     /**
-     * Verifies that calling [DatabaseProvider.close] when already closed is a safe no-op.
+     * TC12 – disconnect() when already disconnected does nothing.
      */
     @Test
-    abstract fun `does nothing when already closed`()
+    abstract fun `TC11 - disconnect when already disconnected does nothing`()
+
+    /**
+     * TC10 – disconnect() when connected closes connection.
+     */
+    @Test
+    abstract fun `TC12 - close when connected closes connection`()
+
+    /**
+     * TC12 – disconnect() when already disconnected does nothing.
+     */
+    @Test
+    abstract fun `TC13 - close when already disconnected does nothing`()
+
+    /** TC13 – isConnected() returns true after connect(). */
+    @Test
+    abstract fun `TC14 - isConnected is true after connect`()
+
+    /**
+     * TC14 – isConnected() returns false after disconnect().
+     */
+    @Test
+    abstract fun `TC15 - isConnected is false after disconnect`()
 }

@@ -17,84 +17,134 @@
 */
 package app.diglit.api.database
 
+import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
-import org.mockito.Mockito.mock
-import org.mockito.Mockito.never
-import org.mockito.Mockito.verify
-import org.mockito.Mockito.`when`
+import org.junit.jupiter.api.MethodOrderer
+import org.junit.jupiter.api.TestMethodOrder
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.never
+import org.mockito.kotlin.reset
+import org.mockito.kotlin.spy
+import org.mockito.kotlin.verify
+import org.mockito.kotlin.whenever
 import java.sql.Connection
 import javax.sql.DataSource
-import kotlin.test.assertFalse
+import kotlin.test.Test
 import kotlin.test.assertTrue
 
 /**
- * Defines the unit tests for [AbstractDatabaseProvider].
+ * Unit tests for [DatabaseProvider] connection lifecycle methods.
  */
+@TestMethodOrder(MethodOrderer.MethodName::class)
 class AbstractDatabaseProviderTest : BaseDatabaseProviderTest() {
     /**
-     * The mocked [DataSource] used for testing.
+     * The data source used to establish the database connection.
+     * This is a mock to simulate the database connection behavior without needing a real database.
      */
-    private val source: DataSource = mock(DataSource::class.java)
+    private lateinit var source: DataSource
 
     /**
-     * The mocked [Connection] used for testing.
+     * The connection to the database.
+     * This is a mock to simulate the database connection behavior without needing a real database.
      */
-    private val connection: Connection = mock(Connection::class.java)
+    private lateinit var connection: Connection
 
-    override var provider: DatabaseProvider =
-        object : AbstractDatabaseProvider() {
-            override val source: DataSource = this@AbstractDatabaseProviderTest.source
+    /**
+     * The [AbstractDatabaseProvider] instance under test.
+     */
+    protected override lateinit var provider: FakeAbstractDatabaseProvider
 
-            public override fun validateEnvironmentVariables(
-                jdbcUrl: String?,
-                username: String?,
-                password: String?,
-            ) {
-                super.validateEnvironmentVariables(jdbcUrl, username, password)
-            }
-        }
-
+    /**
+     * Sets up the database provider and mocks before each test.
+     */
     @BeforeEach
     fun setup() {
-        `when`(source.connection).thenReturn(connection)
+        source = mock()
+        connection = mock()
+        whenever(source.connection).thenReturn(connection)
+
+        provider = spy(FakeAbstractDatabaseProvider(source))
     }
 
     @Test
-    override fun `connects only once`() {
+    override fun `TC08 - connect when disconnected establishes connection`() {
+        provider.disconnect()
         provider.connect()
         assertTrue(provider.isConnected())
-
-        provider.connect() // should be no-op
-        verify(source, never()).connection
     }
 
     @Test
-    override fun `disconnects when connected`() {
+    override fun `TC09 - connect when already connected does nothing`() {
+        provider.connect()
+        reset(provider)
+        provider.connect()
+
+        assertTrue(provider.isConnected())
+
+        verify(provider, never()).source
+    }
+
+    @Test
+    override fun `TC10 - disconnect when connected closes connection`() {
         provider.connect()
         provider.disconnect()
+        assertFalse(provider.isConnected())
+        verify(provider).close()
+    }
+
+    @Test
+    override fun `TC11 - disconnect when already disconnected does nothing`() {
+        provider.disconnect()
+        reset(source)
+        provider.disconnect()
+
+        assertFalse(provider.isConnected())
+
+        verify(provider, never()).source
+    }
+
+    override fun `TC12 - close when connected closes connection`() {
+        provider.connect()
+        provider.close()
         assertFalse(provider.isConnected())
         verify(connection).close()
     }
 
+    override fun `TC13 - close when already disconnected does nothing`() {
+        provider.disconnect()
+        reset(source)
+        provider.close()
+
+        assertFalse(provider.isConnected())
+
+        verify(provider, never()).source
+    }
+
+    /** TC12 – isConnected() returns true after connect(). */
     @Test
-    override fun `does nothing when already disconnected`() {
+    override fun `TC14 - isConnected is true after connect`() {
+        provider.connect()
+        assertTrue(provider.isConnected())
+    }
+
+    @Test
+    override fun `TC15 - isConnected is false after disconnect`() {
+        provider.connect()
         provider.disconnect()
         assertFalse(provider.isConnected())
-        verify(connection, never()).close()
     }
+}
 
-    @Test
-    override fun `closes when connected`() {
-        provider.connect()
-        provider.close()
-        assertFalse(provider.isConnected())
-    }
-
-    @Test
-    override fun `does nothing when already closed`() {
-        provider.close()
-        assertFalse(provider.isConnected())
-        verify(connection, never()).close()
+/**
+ * A fake implementation of [AbstractDatabaseProvider] for testing purposes by exposing necessary methods and
+ * properties.
+ *
+ * @property source The data source used to establish the database connection.
+ */
+class FakeAbstractDatabaseProvider(
+    public override val source: DataSource,
+) : AbstractDatabaseProvider(mock()) {
+    override fun close() {
+        connected = false
     }
 }

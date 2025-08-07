@@ -55,6 +55,10 @@ const val ENVIRONMENT_DB_PASSWORD = "DB_PASSWORD"
 interface DatabaseProvider : Closeable {
     /**
      * Validates environment variables required for the database connection.
+     *
+     * @param jdbcUrl The JDBC URL of the database.
+     * @param username The username for accessing the database.
+     * @param password The password for accessing the database.
      */
     fun validateEnvironmentVariables(
         jdbcUrl: String?,
@@ -97,5 +101,5 @@ interface DatabaseProvider : Closeable {
      */
     fun disconnect()
 
-    override fun close() = disconnect()
+    override fun close()
 }

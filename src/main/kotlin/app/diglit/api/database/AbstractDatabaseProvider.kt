@@ -44,7 +44,7 @@ abstract class AbstractDatabaseProvider(
     /**
      * Whether the database connection has been established.
      */
-    private var connected: Boolean = false
+    protected var connected: Boolean = false
 
     /**
      * Returns true if the database has been connected.
@@ -58,15 +58,10 @@ abstract class AbstractDatabaseProvider(
             return
         }
 
-        try {
-            logger.info { "Establishing connection to database..." }
-            Database.connect(source)
-            connected = true
-            logger.info { "Database connection established successfully." }
-        } catch (e: Exception) {
-            logger.error(e) { "Database connection failed!" }
-            throw e
-        }
+        logger.info { "Establishing connection to database..." }
+        Database.connect(source)
+        connected = true
+        logger.info { "Database connection established successfully." }
     }
 
     override fun disconnect() {
@@ -74,16 +69,8 @@ abstract class AbstractDatabaseProvider(
             logger.info { "Database is not connected. Skipping disconnection attempt." }
             return
         }
-
         logger.info { "Closing database connection..." }
-
-        try {
-            source.connection.close()
-            connected = false
-            logger.info { "Database connection closed." }
-        } catch (e: Exception) {
-            logger.error(e) { "Failed to close database connection." }
-            throw e
-        }
+        close()
+        logger.info { "Database connection closed." }
     }
 }
