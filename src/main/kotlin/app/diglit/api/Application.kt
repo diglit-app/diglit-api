@@ -68,11 +68,6 @@ fun Application.module() {
     val database = DatabaseProviderFactory.create()
     database.connect()
 
-    transaction {
-        SchemaUtils.drop(Users)
-        SchemaUtils.create(Users)
-    }
-
     // Install the ContentNegotiation plugin to handle JSON serialization
     install(ContentNegotiation) {
         json()
@@ -85,6 +80,7 @@ fun Application.module() {
         }
     }
 
+    // Authentication setup
     val environments = dotenv()
     val config =
         JwtConfig(
