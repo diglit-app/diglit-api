@@ -28,10 +28,12 @@ import kotlin.time.ExperimentalTime
  * Configures JWT (JSON Web Token) for authentication.
  *
  * @param secret The secret key used to sign the JWT tokens.
- * @param tokenLifeTime The duration in milliseconds for which the JWT token is valid. Default is 7 days.
+ * @property issuer The issuer of the JWT tokens, typically the application name or domain.
+ * @property tokenLifeTime The duration in milliseconds for which the JWT token is valid. Default is 7 days.
  */
 class JwtConfig(
     secret: String,
+    val issuer: String,
     val tokenLifeTime: Long = DEFAULT_TOKEN_LIFETIME,
 ) {
     /**
@@ -45,7 +47,7 @@ class JwtConfig(
     val verifier: JWTVerifier =
         JWT
             .require(algorithm)
-            .withIssuer(ISSUER)
+            .withIssuer(issuer)
             .build()
 
     /**
@@ -60,7 +62,7 @@ class JwtConfig(
             JWT
                 .create()
                 .withSubject("Authentication")
-                .withIssuer(ISSUER)
+                .withIssuer(issuer)
                 .withExpiresAt(Date(Clock.System.now().toEpochMilliseconds() + tokenLifeTime))
 
         claims.forEach { (name, value) -> builder.withClaim(name, value) }
@@ -75,11 +77,6 @@ class JwtConfig(
 
     companion object {
         /**
-         * The issuer of the JWT token. Used for validating the source of the token.
-         */
-        const val ISSUER: String = "diglit-api"
-
-        /**
          * Default token expiration time (7 days) in milliseconds.
          */
         const val DEFAULT_TOKEN_LIFETIME: Long = 7 * 24 * 60 * 60 * 1000L
@@ -88,6 +85,11 @@ class JwtConfig(
          * Name of the environment variable that stores the JWT secret key.
          */
         const val ENVIRONMENT_JWT_SECRET: String = "JWT_SECRET"
+
+        /**
+         * Name of the environment variable that stores the JWT issuer.
+         */
+        const val ENVIRONMENT_JWT_ISSUER: String = "JWT_ISSUER"
 
         /**
          * Name of the environment variable that stores the JWT expiration time in milliseconds.

@@ -19,7 +19,6 @@ package app.diglit.api
 
 import app.diglit.api.authentication.JwtConfig
 import app.diglit.api.database.DatabaseProviderFactory
-import app.diglit.api.database.schema.Users
 import app.diglit.api.repository.ApiException
 import app.diglit.api.route.privateAuthRoutes
 import app.diglit.api.route.publicAuthRoutes
@@ -36,8 +35,6 @@ import io.ktor.server.plugins.statuspages.StatusPages
 import io.ktor.server.response.respond
 import io.ktor.server.routing.route
 import io.ktor.server.routing.routing
-import org.jetbrains.exposed.sql.SchemaUtils
-import org.jetbrains.exposed.sql.transactions.transaction
 
 /**
  * Configures and starts the Ktor server application module.
@@ -85,6 +82,7 @@ fun Application.module() {
     val config =
         JwtConfig(
             secret = environments[JwtConfig.ENVIRONMENT_JWT_SECRET],
+            issuer = environments[JwtConfig.ENVIRONMENT_JWT_ISSUER],
             tokenLifeTime = environments[JwtConfig.ENVIRONMENT_JWT_TOKEN_LIFETIME].toLong(),
         )
     val authName = "auth-jwt"
